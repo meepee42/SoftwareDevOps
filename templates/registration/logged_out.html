@@ -1,0 +1,15 @@
+{% extends "main/base.html" %}
+
+{% block title %} Logged Out {% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5>You are now logged out</h5>
+        </div>
+        <div class="card-body">
+            <a href="/login/">Click Here to Log  Back In</a>
+        </div>
+    </div>
+{% endblock %}

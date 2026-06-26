@@ -1,0 +1,52 @@
+{% extends "main/base.html" %}
+{% block title %}Locations{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5>Locations</h5>
+            {% if user.is_authenticated and user.admin %}
+                <a href="/create/" type="button" class="btn btn-sm btn-secondary active">Add New Location</a>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            {% if locations.count < 1 %}
+                <h1>No Locations To Display. Add Locations First.</h1>
+            {% else %}
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Address Line 1</th>
+                            <th scope="col">Address Line 2</th>
+                            <th scope="col">Postcode</th>
+                            <th scope="col">Chargers</th>
+                            {% if user.is_authenticated and user.admin %}
+                                <th scope="col">View/Edit</th>
+                                <th scope="col">Delete</th>
+                            {% else %}
+                                <th scope="col">View</th>
+                            {% endif %}
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for location in locations %}
+                        <tr>
+                            <td>{{location.locationName}}</td>
+                            <td>{{location.addressLine1}}</td>
+                            <td>{{location.addressLine2}}</td>
+                            <td>{{location.postcode}}</td>
+                            <td>{{location.vehiclechargingstation_set.count}}</td>
+                            <td><a href="/location/{{location.id}}" type="button" class="btn btn-sm btn-secondary active">View</a></td>
+                            {% if user.is_authenticated and user.admin %}
+                                <td><a href="/delete/{{location.id}}" type="button" class="btn btn-sm btn-secondary active" onclick="return confirm('Are you sure?')">Delete</a></td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

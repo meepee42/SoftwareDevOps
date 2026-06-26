@@ -1,0 +1,58 @@
+{% extends "main/base.html" %}
+{% block title %} View Location {% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5>View Location</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" action="/location/{{ ls.id }}" class="form-group">
+                {% csrf_token %}
+                {{form|crispy}}
+                {% if user.is_authenticated and user.admin %}
+                                <button type="submit" name="save" class="btn btn-sm btn-secondary active">Save Changes</button>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5>EV Chargers</h5>
+            <a href="/location/create/{{ ls.id }}" type="button" class="btn btn-sm btn-secondary active">Add new EV Charger</a>
+        </div>
+        <div class="card-body">
+            {% if chargers.count < 1 %}
+                <h1>No Charger To Display. Add Charger First.</h1>
+            {% else %}
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Installed Date</th>
+                            <th scope="col">Last Review Date</th>
+                            <th scope="col">Next Review Date</th>
+                            <th scope="col">Power Output (kw)</th>
+                            <th scope="col">View/Edit</th>
+                            <th scope="col">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for charger in chargers %}
+                        <tr>
+                            <td>{{charger.chargingStationName}}</td>
+                            <td>{{charger.installedDate}}</td>
+                            <td>{{charger.lastReviewDate}}</td>
+                            <td>{{charger.nextReviewDate}}</td>
+                            <td>{{charger.powerOutput}}</td>
+                            <td><a href="/location/charger/{{charger.id}}" type="button" class="btn btn-sm btn-secondary active">View</a></td>
+                            <td><a href="/location/delete/{{charger.id}}" type="button" class="btn btn-sm btn-secondary active" onclick="return confirm('Are you sure?')">Delete</a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
